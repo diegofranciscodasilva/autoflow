@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AutoFlow | Automação de Planilhas e Arquivos</title>
+    <link rel="stylesheet" href="./assets/css/style.css" />
+    <!-- Remix Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+</head>
+
+<body>
+
+    <!-- ========== HEADER ========== -->
+    <header class="header">
+        <div class="header__container container">
+            <a href="#inicio" class="header__logo"><i class="ri-flashlight-line"></i> AutoFlow</a>
+
+            <!-- Até 768px os links ficam dentro de um botão que abre e fecha o menu -->
+            <nav class="header__nav" id="nav-menu" aria-label="Navegação principal">
+                <ul class="header__list">
+                    <li><a href="#inicio" class="header__link active">Início</a></li>
+                    <li><a href="#planilhas" class="header__link">Planilhas</a></li>
+                    <li><a href="#arquivos" class="header__link">Arquivos</a></li>
+                </ul>
+            </nav>
+
+            <button class="header__toggle" id="nav-toggle" aria-label="Abrir menu" aria-expanded="false">
+                <i class="ri-menu-line"></i>
+            </button>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- ========== HERO ========== -->
+        <section class="hero" id="inicio">
+            <div class="container">
+                <span class="label">Automação de escritório</span>
+                <h1 class="hero__title">Menos tarefa repetitiva, <span>mais tempo para decidir</span></h1>
+                <p class="hero__text">Limpe planilhas e organize arquivos em segundos. Você vê o resultado antes de
+                    baixar.</p>
+                <div class="hero__actions">
+                    <a href="#planilhas" class="btn btn--primary"><i class="ri-table-line"></i> Tratar planilha</a>
+                    <a href="#arquivos" class="btn btn--outline"><i class="ri-folder-zip-line"></i> Organizar
+                        arquivos</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== PLANILHAS ========== -->
+        <section class="section section--alt" id="planilhas">
+            <div class="container">
+                <h2 class="section-title">Limpeza de planilhas</h2>
+                <p class="section-subtitle">Envie um CSV ou XLSX, escolha as regras e confira a prévia.</p>
+
+                <div class="card">
+                    <!-- Etapa 1: arquivo -->
+                    <label class="dropzone" for="sheet-input" id="sheet-drop">
+                        <i class="ri-upload-cloud-2-line"></i>
+                        <strong id="sheet-name">Clique ou arraste uma planilha</strong>
+                        <small>.csv ou .xlsx, até 10 MB</small>
+                    </label>
+                    <input type="file" id="sheet-input" accept=".csv,.xlsx" hidden />
+
+                    <!-- Etapa 2: comando em texto -->
+                    <div class="command">
+                        <label for="command-input">Descreva o que deseja (opcional)</label>
+                        <div class="command__row">
+                            <input id="command-input"
+                                placeholder="Ex.: remover duplicados e linhas vazias, tirar espaços extras" />
+                            <button class="btn btn--outline" id="btn-interpret"><i class="ri-magic-line"></i>
+                                Interpretar</button>
+                        </div>
+                    </div>
+
+                    <!-- Etapa 3: regras -->
+                    <fieldset class="rules">
+                        <legend>Regras de limpeza</legend>
+                        <label class="rule"><input type="checkbox" value="trim" checked /> <span><b>Remover espaços
+                                    extras</b><small>No início, no fim e duplicados</small></span></label>
+                        <label class="rule"><input type="checkbox" value="remove_empty" checked /> <span><b>Remover
+                                    linhas vazias</b><small>Linhas sem nenhum valor</small></span></label>
+                        <label class="rule"><input type="checkbox" value="remove_duplicates" checked /> <span><b>Remover
+                                    duplicados</b><small>Linhas idênticas</small></span></label>
+                        <label class="rule"><input type="checkbox" value="title_case" /> <span><b>Padronizar
+                                    maiúsculas</b><small>"maria SILVA" vira "Maria Silva" (e-mails ficam
+                                    intactos)</small></span></label>
+                        <label class="rule"><input type="checkbox" value="normalize_columns" /> <span><b>Padronizar
+                                    cabeçalhos</b><small>"Nome Completo" vira "nome_completo"</small></span></label>
+                        <label class="rule"><input type="checkbox" value="fill_missing" /> <span><b>Preencher campos
+                                    vazios</b><small>Usa "N/D" onde não há valor</small></span></label>
+                    </fieldset>
+
+                    <button class="btn btn--primary btn--block" id="btn-process" disabled><i class="ri-play-line"></i>
+                        Gerar prévia</button>
+                    <p class="status" id="sheet-status" role="status" aria-live="polite"></p>
+
+                    <!-- Resultado -->
+                    <div class="result" id="sheet-result" hidden>
+                        <div class="stats" id="sheet-stats"></div>
+                        <ul class="log" id="sheet-log"></ul>
+                        <div class="table-wrap">
+                            <table id="sheet-table"></table>
+                        </div>
+                        <small class="muted">Prévia das 8 primeiras linhas.</small>
+                        <div class="result__actions">
+                            <button class="btn btn--outline" data-format="csv"><i class="ri-file-text-line"></i> Baixar
+                                CSV</button>
+                            <button class="btn btn--primary" data-format="xlsx"><i class="ri-file-excel-2-line"></i>
+                                Baixar XLSX</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== ARQUIVOS ========== -->
+        <section class="section" id="arquivos">
+            <div class="container">
+                <h2 class="section-title">Organização de arquivos</h2>
+                <p class="section-subtitle">Receba um ZIP com tudo separado por tipo, e um relatório do que foi feito.
+                </p>
+
+                <div class="card">
+                    <label class="dropzone" for="files-input" id="files-drop">
+                        <i class="ri-folder-upload-line"></i>
+                        <strong>Clique ou arraste vários arquivos</strong>
+                        <small>Até 15 MB no total</small>
+                    </label>
+                    <input type="file" id="files-input" multiple hidden />
+
+                    <ul class="file-list" id="file-list"></ul>
+
+                    <div class="options">
+                        <label class="rule"><input type="checkbox" id="opt-date" /> <span><b>Prefixar com a data de
+                                    hoje</b><small>Ex.: 2026-11-18_relatorio.pdf</small></span></label>
+                        <label class="rule"><input type="checkbox" id="opt-slug" /> <span><b>Padronizar
+                                    nomes</b><small>Minúsculas, sem acentos e sem espaços</small></span></label>
+                    </div>
+
+                    <button class="btn btn--primary btn--block" id="btn-organize" disabled><i
+                            class="ri-folder-zip-line"></i> Organizar e baixar ZIP</button>
+                    <p class="status" id="files-status" role="status" aria-live="polite"></p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__cols">
+                <div>
+                    <h4>Recursos</h4>
+                    <a href="#planilhas">Limpeza de planilhas</a>
+                    <a href="#arquivos">Organização de arquivos</a>
+                </div>
+                <div>
+                    <h4>Sobre o projeto</h4>
+                    <p>Projeto de portfólio. Os arquivos são processados em memória e não ficam salvos.</p>
+                </div>
+            </div>
+            <!-- Marca centralizada na última linha -->
+            <div class="footer__brand"><i class="ri-flashlight-line"></i> AutoFlow &middot; &copy; <span
+                    id="current-year"></span></div>
+        </div>
+    </footer>
+
+    <!-- Botão voltar ao topo -->
+    <button class="scroll-up" id="scroll-up" aria-label="Voltar ao topo"><i class="ri-arrow-up-line"></i></button>
+
+    <script src="./assets/js/script.js"></script>
+</body>
+
+</html>

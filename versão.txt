@@ -1,0 +1,34 @@
+VERSAO DO PROJETO AUTOFLOW
+
+Versao atual: 1.0.0
+Data desta revisao: 2026-11-20
+
+1. HISTORICO DA CRIACAO
+O projeto foi criado como uma aplicacao de portifolio para demonstrar integracao entre frontend web e backend Python.
+
+A interface foi implementada com HTML, CSS e JavaScript sem frameworks frontend.
+O backend foi implementado em Flask para receber uploads e responder com JSON ou downloads.
+As planilhas foram integradas com pandas e openpyxl.
+A organizacao de arquivos foi implementada com zipfile e classificacao por extensao.
+Os arquivos sao tratados em memoria, sem banco de dados e sem persistencia local dos uploads.
+
+2. CORRECOES DA REVISAO 1.0.0
+- Corrigido o escape de caracteres HTML exibidos na previa.
+- Corrigido o estado de habilitacao do botao ao trocar por um arquivo invalido.
+- Corrigido o menu mobile para atualizar aria-expanded ao fechar pelos links.
+- Melhorado o descarte de URLs temporarias apos o download.
+- Limite de 10 MB aplicado tambem no backend.
+- Configuracao segura do servidor por variaveis de ambiente.
+- Adicionado README e documentacao passo a passo.
+
+3. MELHORIAS FUTURAS
+- Adicionar testes automatizados para frontend e backend.
+- Criar configuracao para hospedagem em producao com servidor WSGI.
+- Adicionar interface para todas as funcionalidades dos modulos processor.py e filetools.py.
+- Permitir trabalhar com varias abas de arquivos XLSX.
+- Adicionar progressao de upload e cancelamento de requisicoes.
+- Acrescentar autenticacao caso a aplicacao seja publicada em ambiente compartilhado.
+- Criar relatorios de processamento mais detalhados.
+- Melhorar a deteccao de separadores em CSV.
+- Adicionar limpeza de numeros, datas e telefones.
+- Criar tema claro/escuro e persistir preferencias no navegador.

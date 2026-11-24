@@ -1,0 +1,105 @@
+PASSO A PASSO DO PROJETO AUTOFLOW
+Versao 1.0.0
+
+1. OBJETIVO
+O AutoFlow oferece duas automacoes em uma pagina web: limpeza de planilhas e organizacao de arquivos em lote. Tudo funciona localmente e o backend processa os uploads em memoria.
+
+2. ORGANIZACAO DO PROJETO
+index.html
+Contem a estrutura da pagina, formulario de planilhas, formulario de arquivos, menu, rodape e botoes de download.
+
+assets/css/style.css
+Contem as variaveis visuais, responsividade, estilos dos botoes, card, zonas de arrasto, tabela, menu e rodape.
+
+assets/js/script.js
+Contem os eventos da interface. Valida formatos e tamanhos, interpreta comandos pelo backend, envia arquivos, monta a previa em HTML, gera downloads e controla o menu.
+
+backend/app.py
+E o ponto de entrada do servidor Flask. Habilita CORS, define o limite de uploads, valida rotas e chama os modulos de planilhas e arquivos.
+
+backend/sheets.py
+Le arquivos CSV e XLSX. Aplica regras permitidas e exporta os resultados como CSV ou XLSX.
+
+backend/files.py
+Classifica arquivos por extensao, cria pastas no ZIP, evita nomes duplicados e gera o RELATORIO.txt.
+
+backend/processor.py
+Modulo auxiliar para leituras, transformacoes, filtros, ordenacao e exportacao avancada de planilhas.
+
+backend/filetools.py
+Modulo auxiliar para organizacao por tipo, renomeacao em lote e mesclagem de planilhas.
+
+backend/utils.py
+Contem slugify, usado para criar nomes em minusculas e sem acentos.
+
+backend/requirements.txt
+Lista Flask, Flask-Cors, pandas e openpyxl.
+
+README.md
+Explica instalacao, execucao, uso e estrutura.
+
+3. INSTALACAO
+1. Instale Python 3.10 ou superior.
+2. Abra o PowerShell na pasta do projeto.
+3. Entre na pasta backend.
+4. Crie o ambiente virtual: python -m venv .venv
+5. Ative o ambiente: .venv\Scripts\Activate.ps1
+6. Atualize o pip: python -m pip install --upgrade pip
+7. Instale as dependencias: pip install -r requirements.txt
+
+4. INICIAR O SERVIDOR
+1. Ainda na pasta backend, execute: python app.py
+2. O backend inicia em http://127.0.0.1:5000.
+3. Abra index.html diretamente no navegador ou execute, na raiz do projeto, python -m http.server 8080.
+4. Acesse http://localhost:8080.
+
+Para configurar endereco ou porta pelo ambiente Windows, use:
+set HOST=127.0.0.1
+set PORT=5000
+set FLASK_DEBUG=0
+python app.py
+
+5. FLUXO DE LIMPEZA DE PLANILHAS
+1. O usuario seleciona um arquivo pela zona de arrasto ou pelo campo.
+2. O JavaScript valida extensao e tamanho.
+3. O arquivo e as regras selecionadas sao enviados a POST /api/sheet/process.
+4. app.py chama load_uploaded_sheet e sheets.apply_rules.
+5. O backend devolve quantidade de linhas, colunas, log e previa.
+6. JavaScript monta a tabela com valores protegidos contra HTML.
+7. Nos botoes CSV ou XLSX, outra requisicao gera o arquivo tratado.
+8. sheets.export devolve os bytes e o navegador inicia o download.
+
+Regras disponiveis:
+- trim: remove espacos duplicados e nas extremidades.
+- remove_empty: remove linhas completamente vazias.
+- remove_duplicates: remove linhas repetidas.
+- title_case: padroniza maiusculas e minusculas; preserva textos de e-mail.
+- normalize_columns: transforma cabecalhos em nomes tipo snake_case.
+- fill_missing: preenche campos vazios com N/D.
+
+6. FLUXO DE ORGANIZACAO DE ARQUIVOS
+1. O usuario seleciona um ou varios arquivos.
+2. JavaScript soma os tamanhos e exige no maximo 15 MB.
+3. Os arquivos e as opcoes sao enviados a POST /api/files/organize.
+4. files.organize le o nome seguro de cada arquivo e identifica a categoria pela extensao.
+5. Se solicitado, aplica padronizacao de nome e prefixo com a data.
+6. Um novo nome numerado evita sobrescrever arquivos iguais.
+7. O backend monta o ZIP em memoria e inclui RELATORIO.txt.
+8. JavaScript recebe o ZIP e inicia o download.
+
+7. LIMITES E VALIDACOES
+- Planilhas: CSV ou XLSX, ate 10 MB.
+- Arquivos organizados: ate 15 MB no total.
+- Backend: limite geral de 15 MB por requisicao.
+- Regras: somente valores presentes em ALLOWED_RULES sao aceitos.
+- Nomes de arquivo: secure_filename e sanitizacao evitam caminhos inseguros.
+- Processamento em memoria: arquivos nao sao salvos no disco.
+
+8. TESTES RAPIDOS
+1. py -m py_compile backend/app.py backend/sheets.py backend/files.py backend/utils.py
+2. node --check assets/js/script.js
+3. Inicie o backend.
+4. Carregue uma planilha pequena e gere uma previa.
+5. Baixe o CSV e o XLSX.
+6. Selecione arquivos de tipos diferentes e baixe o ZIP.
+7. Confirme o menu e a navegacao no navegador.
